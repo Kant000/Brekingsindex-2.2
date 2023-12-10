@@ -1,0 +1,70 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+n1 = 1.000293
+d = 1E-3
+n = 1.5
+labda = 532E-9
+def cal_r(n1, i, n):
+    # degrees to radians
+    v1_rad = np.radians(i)
+
+    # Snellius
+    v2_rad = np.arcsin((n1/n) * np.sin(v1_rad))
+
+    # back to degrees
+    v2_deg = np.degrees(v2_rad)
+
+    return v2_deg
+
+def cal_N(d,n,labda,r,i):
+    s1 = n / np.cos(np.radians(r)) 
+    s2 = np.tan(np.radians(i)) * np.sin(np.radians(i))     
+    s3 = np.tan(np.radians(r)) * np.sin(np.radians(i))
+    s4 = n - 1 
+    s5 = 1 / np.cos(np.radians(i))                            
+    N = ((2 * d) / labda) * (s1 + s2 - s3 - s4 - s5)
+    return N
+
+list_N1 = []
+list_r = []
+hoek = range(1,26)
+
+for i in hoek:
+    r = cal_r(n1, i, n)
+    N = cal_N(d, n, labda, r, i)
+    list_r.append(r)
+    list_N1.append(N)
+
+list_N2 = []
+d = 2E-3
+for i in hoek:
+    r = cal_r(n1, i, n)
+    N = cal_N(d, n, labda, r, i)
+    list_N2.append(N)
+
+list_N3 = []
+d = 3E-3
+for i in hoek:
+    r = cal_r(n1, i, n)
+    N = cal_N(d, n, labda, r, i)
+    list_N3.append(N)
+    
+list_N4 = []
+d = 4E-3
+for i in hoek:
+    r = cal_r(n1, i, n)
+    N = cal_N(d, n, labda, r, i)
+    list_N4.append(N)
+
+
+
+plt.plot(hoek, list_N1, label="d = 1 mm")
+plt.plot(hoek, list_N2, label="d = 2 mm")
+plt.plot(hoek, list_N3, label="d = 3 mm")
+plt.plot(hoek, list_N4, label="d = 4 mm")
+plt.title("N/hoek van het glas")
+plt.xlabel('hoek van het glas (graden)')
+plt.ylabel('Aantal interferentie (-)')
+plt.legend()
+plt.show()
