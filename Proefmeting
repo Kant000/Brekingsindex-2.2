@@ -1,0 +1,48 @@
+import matplotlib.pyplot as plt
+import numpy as np
+
+n1 = 1.000293
+d = 2E-3
+n = 1.5168
+labda = 532E-9
+
+# hoek r berekenen
+def cal_r(n1, i, n):
+    # degrees to radians
+    v1_rad = np.radians(i)
+
+    # Snellius
+    v2_rad = np.arcsin((n1/n) * np.sin(v1_rad))
+
+    # back to degrees
+    v2_deg = np.degrees(v2_rad)
+
+    return v2_deg
+# aantal franje berekenen
+def cal_N(d,n,labda,r,i):
+    s1 = n / np.cos(np.radians(r)) 
+    s2 = np.tan(np.radians(i)) * np.sin(np.radians(i))     
+    s3 = np.tan(np.radians(r)) * np.sin(np.radians(i))
+    s4 = n - 1 
+    s5 = 1 / np.cos(np.radians(i))                            
+    N = ((2 * d) / labda) * (s1 + s2 - s3 - s4 - s5)
+    return N
+
+hoek = range(1,26)
+
+list_N2 = []
+for i in hoek:
+    r = cal_r(n1, i, n)
+    N = cal_N(d, n, labda, r, i)
+    list_N2.append(N)
+
+franje = [10,27,79,137] # vul je aantal franje hierin
+graden = [5,10,15,20]  # vul hier bijbehorende hoek
+
+plt.plot(hoek, list_N2, label="d = 2 mm")
+plt.scatter(graden,franje,marker='x', color = "red", label="meting")
+plt.title("Meetresultaten")
+plt.xlabel('hoek van het glas (graden)')
+plt.ylabel('Aantal interferentie (-)')
+plt.legend()
+plt.show()
