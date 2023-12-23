@@ -2,9 +2,11 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 n1 = 1.000293
-d = 1E-3
-n = 1.5
+d = 2E-3
+n = 1.455
 labda = 532E-9
+N_gem = 9
+# hoek r berekenen
 def cal_r(n1, i, n):
     # degrees to radians
     v1_rad = np.radians(i)
@@ -16,7 +18,7 @@ def cal_r(n1, i, n):
     v2_deg = np.degrees(v2_rad)
 
     return v2_deg
-
+# aantal franje berekenen
 def cal_N(d,n,labda,r,i):
     s1 = n / np.cos(np.radians(r)) 
     s2 = np.tan(np.radians(i)) * np.sin(np.radians(i))     
@@ -25,45 +27,31 @@ def cal_N(d,n,labda,r,i):
     s5 = 1 / np.cos(np.radians(i))                            
     N = ((2 * d) / labda) * (s1 + s2 - s3 - s4 - s5)
     return N
-
-list_N1 = []
-list_r = []
-hoek = range(1,26)
-
-for i in hoek:
-    r = cal_r(n1, i, n)
-    N = cal_N(d, n, labda, r, i)
-    list_r.append(r)
-    list_N1.append(N)
+'''
+def cal_n(d,N_gem,labda,r,i):
+    s2 = np.tan(np.radians(i)) * np.sin(np.radians(i))     
+    s3 = np.tan(np.radians(r)) * np.sin(np.radians(i))
+    s5 = 1 / np.cos(np.radians(i))   
+    s6 = (1/np.cos(np.radians(r)) - 1                        
+    n = ((((N* labda) / (2 * d)) - s2 + s3 + s5) - 1) / (s6)
+    return n
+'''
+hoek = range(1,21)
 
 list_N2 = []
-d = 2E-3
 for i in hoek:
     r = cal_r(n1, i, n)
     N = cal_N(d, n, labda, r, i)
     list_N2.append(N)
 
-list_N3 = []
-d = 3E-3
-for i in hoek:
-    r = cal_r(n1, i, n)
-    N = cal_N(d, n, labda, r, i)
-    list_N3.append(N)
-    
-list_N4 = []
-d = 4E-3
-for i in hoek:
-    r = cal_r(n1, i, n)
-    N = cal_N(d, n, labda, r, i)
-    list_N4.append(N)
+franje = [9.46,37.85,82.15,145.86] # vul je aantal franje hierin
+graden = [5,10,15,20]  # vul hier bijbehorende hoek
+std = [0.8427, 2.3051, 4.1907, 7.5733]
 
-
-
-plt.plot(hoek, list_N1, label="d = 1 mm")
 plt.plot(hoek, list_N2, label="d = 2 mm")
-plt.plot(hoek, list_N3, label="d = 3 mm")
-plt.plot(hoek, list_N4, label="d = 4 mm")
-plt.title("N/hoek van het glas")
+plt.scatter(graden,franje,marker='x', color = "red", label="meting")
+plt.errorbar(graden, franje, yerr=std, fmt=' ', label='foutmarge')
+plt.title("Meetresultaten")
 plt.xlabel('hoek van het glas (graden)')
 plt.ylabel('Aantal interferentie (-)')
 plt.legend()
