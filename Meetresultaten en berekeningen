@@ -1,0 +1,15 @@
+import numpy as np
+
+a5 = [9,8,10,9,9,9,11,9,10,11,9,10,9]
+a10 = [28, 27, 26, 27, 27, 31, 29, 29, 26, 31, 26, 28, 34]
+a15 = [48, 50, 56, 56, 54, 55, 57, 54, 51, 62, 55, 56, 45]
+a20 = [84, 91, 87, 81, 93, 107, 104, 95, 91, 94, 86]
+
+print(np.average(a5), np.std(a5))
+print(np.average(a10), np.std(a10))
+print(np.average(a15), np.std(a15))
+print(np.average(a20), np.std(a20))
+
+print(np.average(a5) + np.average(a10))
+print(np.average(a10) + np.average(a15))
+print(np.average(a15) + np.average(a20))
